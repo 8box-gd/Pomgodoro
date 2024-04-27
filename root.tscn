@@ -1,0 +1,64 @@
+[gd_scene load_steps=2 format=3 uid="uid://ntr1fp5d3cb5"]
+
+[ext_resource type="Script" path="res://root.gd" id="1_y7fiw"]
+
+[node name="Root" type="Node2D"]
+script = ExtResource("1_y7fiw")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="BackgroundRect" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0.388, 0.278, 1)
+
+[node name="TimeLabel" type="Label" parent="CanvasLayer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 229.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 80
+text = "00:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StartPauseButton" type="Button" parent="CanvasLayer"]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 528.0
+offset_top = -20.0
+offset_right = -537.0
+offset_bottom = 11.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "START"
+
+[node name="CycleLabel" type="Label" parent="CanvasLayer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 376.0
+grow_horizontal = 2
+text = "#0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WorkTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="BreakTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="LongBreakTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[connection signal="pressed" from="CanvasLayer/StartPauseButton" to="." method="_on_start_pause_button_pressed"]
+[connection signal="timeout" from="WorkTimer" to="." method="_on_work_timer_timeout"]
+[connection signal="timeout" from="BreakTimer" to="." method="_on_break_timer_timeout"]
+[connection signal="timeout" from="LongBreakTimer" to="." method="_on_long_break_timer_timeout"]
