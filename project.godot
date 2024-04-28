@@ -14,7 +14,9 @@ config/name="Pomgodoro"
 run/main_scene="res://root.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 run/max_fps=30
-config/icon="res://icon.svg"
+boot_splash/bg_color=Color(0.501961, 0, 0, 1)
+boot_splash/image="res://pomgodoro_icon.png"
+config/icon="res://pomgodoro_icon.png"
 
 [autoload]
 

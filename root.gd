@@ -236,6 +236,7 @@ func update_timer():
 	break_timer.wait_time = break_timer_mins * 60
 	long_break_timer.wait_time = long_break_timer_mins * 60
 	current_cycle = 0
+	cycle_label.text = "#0"
 	background_rect.color = current_theme[0]
 
 func _on_save_button_pressed():
