@@ -1,0 +1,8 @@
+{
+	"work_time": 25,
+	"break_time": 5,
+	"long_break_time": 15,
+	"cycles_to_long_break": 4,
+	"autostart": false,
+	"dark_theme": true
+}

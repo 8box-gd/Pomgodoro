@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://ntr1fp5d3cb5"]
+[gd_scene load_steps=4 format=3 uid="uid://ntr1fp5d3cb5"]
 
 [ext_resource type="Script" path="res://root.gd" id="1_y7fiw"]
+[ext_resource type="AudioStream" uid="uid://df7btuja47jv4" path="res://Sounds/ow ow ow ow.wav" id="2_1nven"]
+[ext_resource type="AudioStream" uid="uid://c2npp60eb8u6t" path="res://Sounds/yuh.wav" id="3_qqgwb"]
 
 [node name="Root" type="Node2D"]
 script = ExtResource("1_y7fiw")
@@ -8,44 +10,216 @@ script = ExtResource("1_y7fiw")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="BackgroundRect" type="ColorRect" parent="CanvasLayer"]
+unique_name_in_owner = true
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(1, 0.388, 0.278, 1)
+color = Color(0.502, 0, 0, 1)
 
-[node name="TimeLabel" type="Label" parent="CanvasLayer"]
-anchors_preset = 10
+[node name="TimerContainer" type="VBoxContainer" parent="CanvasLayer"]
+unique_name_in_owner = true
+anchors_preset = 15
 anchor_right = 1.0
-offset_bottom = 229.0
+anchor_bottom = 1.0
 grow_horizontal = 2
-theme_override_font_sizes/font_size = 80
+grow_vertical = 2
+alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="ChangeTimerContainer" type="HBoxContainer" parent="CanvasLayer/TimerContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="WorkButton" type="Button" parent="CanvasLayer/TimerContainer/ChangeTimerContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "WORK"
+
+[node name="BreakButton" type="Button" parent="CanvasLayer/TimerContainer/ChangeTimerContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "BREAK"
+
+[node name="LongBreakButton" type="Button" parent="CanvasLayer/TimerContainer/ChangeTimerContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "LONG BREAK"
+
+[node name="TimeLabel" type="Label" parent="CanvasLayer/TimerContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 100
 text = "00:00"
 horizontal_alignment = 1
 vertical_alignment = 1
+metadata/_edit_lock_ = true
 
-[node name="StartPauseButton" type="Button" parent="CanvasLayer"]
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = 528.0
-offset_top = -20.0
-offset_right = -537.0
-offset_bottom = 11.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "START"
-
-[node name="CycleLabel" type="Label" parent="CanvasLayer"]
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 376.0
-grow_horizontal = 2
+[node name="CycleLabel" type="Label" parent="CanvasLayer/TimerContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
 text = "#0"
 horizontal_alignment = 1
 vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/TimerContainer"]
+custom_minimum_size = Vector2(0, 11.28)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/TimerContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="StartPauseButton" type="Button" parent="CanvasLayer/TimerContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "START"
+
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/TimerContainer"]
+custom_minimum_size = Vector2(0, 11.28)
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/TimerContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="SettingsButton" type="Button" parent="CanvasLayer/TimerContainer/HBoxContainer2"]
+layout_mode = 2
+text = "⚙"
+
+[node name="SettingsContainer" type="VBoxContainer" parent="CanvasLayer"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -256.0
+offset_right = 256.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="WorkTime" type="HBoxContainer" parent="CanvasLayer/SettingsContainer"]
+layout_mode = 2
+
+[node name="WorkSlider" type="HSlider" parent="CanvasLayer/SettingsContainer/WorkTime"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+min_value = 1.0
+max_value = 60.0
+value = 25.0
+rounded = true
+ticks_on_borders = true
+
+[node name="WorkSettingLabel" type="Label" parent="CanvasLayer/SettingsContainer/WorkTime"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Work time: 25 minutes"
+
+[node name="BreakTime" type="HBoxContainer" parent="CanvasLayer/SettingsContainer"]
+layout_mode = 2
+
+[node name="BreakSlider" type="HSlider" parent="CanvasLayer/SettingsContainer/BreakTime"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+min_value = 1.0
+max_value = 60.0
+value = 5.0
+rounded = true
+ticks_on_borders = true
+
+[node name="BreakSettingLabel" type="Label" parent="CanvasLayer/SettingsContainer/BreakTime"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Break time: 5 minutes"
+
+[node name="LongBreakTime" type="HBoxContainer" parent="CanvasLayer/SettingsContainer"]
+layout_mode = 2
+
+[node name="LongBreakSlider" type="HSlider" parent="CanvasLayer/SettingsContainer/LongBreakTime"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+min_value = 1.0
+max_value = 60.0
+value = 15.0
+rounded = true
+ticks_on_borders = true
+
+[node name="LongBreakSettingLabel" type="Label" parent="CanvasLayer/SettingsContainer/LongBreakTime"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Long break time: 15 minutes"
+
+[node name="LongBreakCycles" type="HBoxContainer" parent="CanvasLayer/SettingsContainer"]
+layout_mode = 2
+
+[node name="CycleSlider" type="HSlider" parent="CanvasLayer/SettingsContainer/LongBreakCycles"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+min_value = 1.0
+max_value = 10.0
+value = 4.0
+rounded = true
+ticks_on_borders = true
+
+[node name="CycleSettingLabel" type="Label" parent="CanvasLayer/SettingsContainer/LongBreakCycles"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Have a long break every 4 cycles"
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/SettingsContainer"]
+custom_minimum_size = Vector2(533.765, 0)
+layout_mode = 2
+
+[node name="Autostart" type="HBoxContainer" parent="CanvasLayer/SettingsContainer"]
+layout_mode = 2
+
+[node name="AutostartButton" type="CheckButton" parent="CanvasLayer/SettingsContainer/Autostart"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="AutostartLabel" type="Label" parent="CanvasLayer/SettingsContainer/Autostart"]
+layout_mode = 2
+text = "Autostart timers"
+
+[node name="DarkTheme" type="HBoxContainer" parent="CanvasLayer/SettingsContainer"]
+layout_mode = 2
+
+[node name="DarkButton" type="CheckButton" parent="CanvasLayer/SettingsContainer/DarkTheme"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+
+[node name="DarkLabel" type="Label" parent="CanvasLayer/SettingsContainer/DarkTheme"]
+layout_mode = 2
+text = "Dark theme"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/SettingsContainer"]
+layout_mode = 2
+
+[node name="ResetButton" type="Button" parent="CanvasLayer/SettingsContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "SET DEFAULT"
+
+[node name="SaveButton" type="Button" parent="CanvasLayer/SettingsContainer/HBoxContainer"]
+layout_mode = 2
+text = "SAVE"
+
+[node name="ApplyButton" type="Button" parent="CanvasLayer/SettingsContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "APPLY"
 
 [node name="WorkTimer" type="Timer" parent="."]
 wait_time = 5.0
@@ -58,7 +232,25 @@ one_shot = true
 wait_time = 3.0
 one_shot = true
 
-[connection signal="pressed" from="CanvasLayer/StartPauseButton" to="." method="_on_start_pause_button_pressed"]
+[node name="Alarm" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_1nven")
+
+[node name="Click" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_qqgwb")
+
+[connection signal="pressed" from="CanvasLayer/TimerContainer/ChangeTimerContainer/WorkButton" to="." method="_on_work_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/TimerContainer/ChangeTimerContainer/BreakButton" to="." method="_on_break_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/TimerContainer/ChangeTimerContainer/LongBreakButton" to="." method="_on_long_break_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/TimerContainer/HBoxContainer/StartPauseButton" to="." method="_on_start_pause_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/TimerContainer/HBoxContainer2/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="value_changed" from="CanvasLayer/SettingsContainer/WorkTime/WorkSlider" to="." method="_on_work_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/SettingsContainer/BreakTime/BreakSlider" to="." method="_on_break_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/SettingsContainer/LongBreakTime/LongBreakSlider" to="." method="_on_long_break_slider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/SettingsContainer/LongBreakCycles/CycleSlider" to="." method="_on_cycle_slider_value_changed"]
+[connection signal="toggled" from="CanvasLayer/SettingsContainer/DarkTheme/DarkButton" to="." method="_on_dark_button_toggled"]
+[connection signal="pressed" from="CanvasLayer/SettingsContainer/HBoxContainer/ResetButton" to="." method="_on_reset_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/SettingsContainer/HBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/SettingsContainer/HBoxContainer/ApplyButton" to="." method="_on_apply_button_pressed"]
 [connection signal="timeout" from="WorkTimer" to="." method="_on_work_timer_timeout"]
 [connection signal="timeout" from="BreakTimer" to="." method="_on_break_timer_timeout"]
 [connection signal="timeout" from="LongBreakTimer" to="." method="_on_long_break_timer_timeout"]
