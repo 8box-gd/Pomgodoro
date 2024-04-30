@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://ntr1fp5d3cb5"]
+[gd_scene load_steps=6 format=3 uid="uid://ntr1fp5d3cb5"]
 
 [ext_resource type="Script" path="res://root.gd" id="1_y7fiw"]
-[ext_resource type="AudioStream" uid="uid://df7btuja47jv4" path="res://Sounds/ow ow ow ow.wav" id="2_1nven"]
-[ext_resource type="AudioStream" uid="uid://c2npp60eb8u6t" path="res://Sounds/yuh.wav" id="3_qqgwb"]
+[ext_resource type="AudioStream" uid="uid://df7btuja47jv4" path="res://Alarms/owowowow.wav" id="2_1nven"]
+[ext_resource type="Texture2D" uid="uid://ctdkfii28wemh" path="res://SettingsIcon.png" id="2_h3of0"]
+[ext_resource type="Theme" uid="uid://eio0rva7lh3b" path="res://DefaultTheme.tres" id="2_o2fwf"]
+[ext_resource type="AudioStream" uid="uid://c2npp60eb8u6t" path="res://Clicks/yuh.wav" id="3_qqgwb"]
 
 [node name="Root" type="Node2D"]
 script = ExtResource("1_y7fiw")
@@ -20,6 +22,7 @@ color = Color(0.502, 0, 0, 1)
 
 [node name="TimerContainer" type="VBoxContainer" parent="CanvasLayer"]
 unique_name_in_owner = true
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -35,22 +38,26 @@ alignment = 1
 [node name="WorkButton" type="Button" parent="CanvasLayer/TimerContainer/ChangeTimerContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("2_o2fwf")
 disabled = true
 text = "WORK"
 
 [node name="BreakButton" type="Button" parent="CanvasLayer/TimerContainer/ChangeTimerContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("2_o2fwf")
 text = "BREAK"
 
 [node name="LongBreakButton" type="Button" parent="CanvasLayer/TimerContainer/ChangeTimerContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("2_o2fwf")
 text = "LONG BREAK"
 
 [node name="TimeLabel" type="Label" parent="CanvasLayer/TimerContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("2_o2fwf")
 theme_override_font_sizes/font_size = 100
 text = "00:00"
 horizontal_alignment = 1
@@ -60,6 +67,7 @@ metadata/_edit_lock_ = true
 [node name="CycleLabel" type="Label" parent="CanvasLayer/TimerContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("2_o2fwf")
 theme_override_font_sizes/font_size = 20
 text = "#0"
 horizontal_alignment = 1
@@ -77,6 +85,7 @@ alignment = 1
 [node name="StartPauseButton" type="Button" parent="CanvasLayer/TimerContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("2_o2fwf")
 theme_override_font_sizes/font_size = 20
 text = "START"
 
@@ -89,12 +98,18 @@ layout_mode = 2
 alignment = 1
 
 [node name="SettingsButton" type="Button" parent="CanvasLayer/TimerContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(32, 0)
 layout_mode = 2
-text = "⚙"
+text = "    "
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/TimerContainer/HBoxContainer2/SettingsButton"]
+position = Vector2(16, 15)
+scale = Vector2(0.138889, 0.138889)
+texture = ExtResource("2_h3of0")
+metadata/_edit_lock_ = true
 
 [node name="SettingsContainer" type="VBoxContainer" parent="CanvasLayer"]
 unique_name_in_owner = true
-visible = false
 anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
@@ -105,6 +120,64 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
+[node name="Volume" type="HBoxContainer" parent="CanvasLayer/SettingsContainer"]
+layout_mode = 2
+
+[node name="VolumeSlider" type="HSlider" parent="CanvasLayer/SettingsContainer/Volume"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+max_value = 1.0
+step = 0.0
+value = 1.0
+ticks_on_borders = true
+
+[node name="VolumeLabel" type="Label" parent="CanvasLayer/SettingsContainer/Volume"]
+layout_mode = 2
+theme = ExtResource("2_o2fwf")
+text = "Volume"
+
+[node name="AlarmSelect" type="HBoxContainer" parent="CanvasLayer/SettingsContainer"]
+layout_mode = 2
+
+[node name="AlarmOptions" type="OptionButton" parent="CanvasLayer/SettingsContainer/AlarmSelect"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 2
+selected = 0
+allow_reselect = true
+popup/item_0/text = "Default"
+popup/item_0/id = 0
+popup/item_1/text = "NOIDED"
+popup/item_1/id = 1
+
+[node name="AlarmSoundLabel" type="Label" parent="CanvasLayer/SettingsContainer/AlarmSelect"]
+layout_mode = 2
+theme = ExtResource("2_o2fwf")
+text = "Alarm sound"
+
+[node name="ClickSelect" type="HBoxContainer" parent="CanvasLayer/SettingsContainer"]
+layout_mode = 2
+
+[node name="ClickOptions" type="OptionButton" parent="CanvasLayer/SettingsContainer/ClickSelect"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 2
+selected = 0
+allow_reselect = true
+popup/item_0/text = "Default"
+popup/item_0/id = 0
+popup/item_1/text = "NOIDED"
+popup/item_1/id = 1
+
+[node name="ClickSoundLabel" type="Label" parent="CanvasLayer/SettingsContainer/ClickSelect"]
+layout_mode = 2
+theme = ExtResource("2_o2fwf")
+text = "Click sound"
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/SettingsContainer"]
+custom_minimum_size = Vector2(533.765, 10)
+layout_mode = 2
+
 [node name="WorkTime" type="HBoxContainer" parent="CanvasLayer/SettingsContainer"]
 layout_mode = 2
 
@@ -112,6 +185,7 @@ layout_mode = 2
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
+theme = ExtResource("2_o2fwf")
 min_value = 1.0
 max_value = 60.0
 value = 25.0
@@ -121,6 +195,7 @@ ticks_on_borders = true
 [node name="WorkSettingLabel" type="Label" parent="CanvasLayer/SettingsContainer/WorkTime"]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("2_o2fwf")
 text = "Work time: 25 minutes"
 
 [node name="BreakTime" type="HBoxContainer" parent="CanvasLayer/SettingsContainer"]
@@ -139,6 +214,7 @@ ticks_on_borders = true
 [node name="BreakSettingLabel" type="Label" parent="CanvasLayer/SettingsContainer/BreakTime"]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("2_o2fwf")
 text = "Break time: 5 minutes"
 
 [node name="LongBreakTime" type="HBoxContainer" parent="CanvasLayer/SettingsContainer"]
@@ -157,6 +233,7 @@ ticks_on_borders = true
 [node name="LongBreakSettingLabel" type="Label" parent="CanvasLayer/SettingsContainer/LongBreakTime"]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("2_o2fwf")
 text = "Long break time: 15 minutes"
 
 [node name="LongBreakCycles" type="HBoxContainer" parent="CanvasLayer/SettingsContainer"]
@@ -175,10 +252,11 @@ ticks_on_borders = true
 [node name="CycleSettingLabel" type="Label" parent="CanvasLayer/SettingsContainer/LongBreakCycles"]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("2_o2fwf")
 text = "Have a long break every 4 cycles"
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/SettingsContainer"]
-custom_minimum_size = Vector2(533.765, 0)
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/SettingsContainer"]
+custom_minimum_size = Vector2(533.765, 10)
 layout_mode = 2
 
 [node name="Autostart" type="HBoxContainer" parent="CanvasLayer/SettingsContainer"]
@@ -190,6 +268,7 @@ layout_mode = 2
 
 [node name="AutostartLabel" type="Label" parent="CanvasLayer/SettingsContainer/Autostart"]
 layout_mode = 2
+theme = ExtResource("2_o2fwf")
 text = "Autostart timers"
 
 [node name="DarkTheme" type="HBoxContainer" parent="CanvasLayer/SettingsContainer"]
@@ -202,24 +281,33 @@ button_pressed = true
 
 [node name="DarkLabel" type="Label" parent="CanvasLayer/SettingsContainer/DarkTheme"]
 layout_mode = 2
+theme = ExtResource("2_o2fwf")
 text = "Dark theme"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/SettingsContainer"]
+[node name="MarginContainer3" type="MarginContainer" parent="CanvasLayer/SettingsContainer"]
+custom_minimum_size = Vector2(533.765, 10)
 layout_mode = 2
 
-[node name="ResetButton" type="Button" parent="CanvasLayer/SettingsContainer/HBoxContainer"]
+[node name="BottomButtons" type="HBoxContainer" parent="CanvasLayer/SettingsContainer"]
+layout_mode = 2
+
+[node name="ResetButton" type="Button" parent="CanvasLayer/SettingsContainer/BottomButtons"]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("2_o2fwf")
 text = "SET DEFAULT"
 
-[node name="SaveButton" type="Button" parent="CanvasLayer/SettingsContainer/HBoxContainer"]
+[node name="SaveButton" type="Button" parent="CanvasLayer/SettingsContainer/BottomButtons"]
+visible = false
 layout_mode = 2
-text = "SAVE"
+theme = ExtResource("2_o2fwf")
+text = "SAVE TO DISK"
 
-[node name="ApplyButton" type="Button" parent="CanvasLayer/SettingsContainer/HBoxContainer"]
+[node name="ApplyButton" type="Button" parent="CanvasLayer/SettingsContainer/BottomButtons"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "APPLY"
+theme = ExtResource("2_o2fwf")
+text = "SAVE AND APPLY"
 
 [node name="WorkTimer" type="Timer" parent="."]
 wait_time = 5.0
@@ -234,23 +322,28 @@ one_shot = true
 
 [node name="Alarm" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_1nven")
+bus = &"Mutable"
 
 [node name="Click" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_qqgwb")
+bus = &"Mutable"
 
 [connection signal="pressed" from="CanvasLayer/TimerContainer/ChangeTimerContainer/WorkButton" to="." method="_on_work_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/TimerContainer/ChangeTimerContainer/BreakButton" to="." method="_on_break_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/TimerContainer/ChangeTimerContainer/LongBreakButton" to="." method="_on_long_break_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/TimerContainer/HBoxContainer/StartPauseButton" to="." method="_on_start_pause_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/TimerContainer/HBoxContainer2/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="value_changed" from="CanvasLayer/SettingsContainer/Volume/VolumeSlider" to="." method="_on_volume_slider_value_changed"]
+[connection signal="item_selected" from="CanvasLayer/SettingsContainer/AlarmSelect/AlarmOptions" to="." method="_on_alarm_options_item_selected"]
+[connection signal="item_selected" from="CanvasLayer/SettingsContainer/ClickSelect/ClickOptions" to="." method="_on_click_options_item_selected"]
 [connection signal="value_changed" from="CanvasLayer/SettingsContainer/WorkTime/WorkSlider" to="." method="_on_work_slider_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/SettingsContainer/BreakTime/BreakSlider" to="." method="_on_break_slider_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/SettingsContainer/LongBreakTime/LongBreakSlider" to="." method="_on_long_break_slider_value_changed"]
 [connection signal="value_changed" from="CanvasLayer/SettingsContainer/LongBreakCycles/CycleSlider" to="." method="_on_cycle_slider_value_changed"]
 [connection signal="toggled" from="CanvasLayer/SettingsContainer/DarkTheme/DarkButton" to="." method="_on_dark_button_toggled"]
-[connection signal="pressed" from="CanvasLayer/SettingsContainer/HBoxContainer/ResetButton" to="." method="_on_reset_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/SettingsContainer/HBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/SettingsContainer/HBoxContainer/ApplyButton" to="." method="_on_apply_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/SettingsContainer/BottomButtons/ResetButton" to="." method="_on_reset_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/SettingsContainer/BottomButtons/SaveButton" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/SettingsContainer/BottomButtons/ApplyButton" to="." method="_on_apply_button_pressed"]
 [connection signal="timeout" from="WorkTimer" to="." method="_on_work_timer_timeout"]
 [connection signal="timeout" from="BreakTimer" to="." method="_on_break_timer_timeout"]
 [connection signal="timeout" from="LongBreakTimer" to="." method="_on_long_break_timer_timeout"]

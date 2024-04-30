@@ -3,6 +3,9 @@
 	"break_time": 5,
 	"long_break_time": 15,
 	"cycles_to_long_break": 4,
+	"volume": 1.0,
 	"autostart": false,
-	"dark_theme": true
+	"dark_theme": true,
+	"selected_alarm": 0,
+	"selected_click": 0
 }

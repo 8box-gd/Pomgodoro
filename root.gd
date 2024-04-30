@@ -27,6 +27,9 @@ enum {WORK, BREAK, LONGBREAK}
 @onready var cycle_setting_label = %CycleSettingLabel
 @onready var autostart_button = %AutostartButton
 @onready var dark_button = %DarkButton
+@onready var volume_slider = $CanvasLayer/SettingsContainer/Volume/VolumeSlider
+@onready var click_options = %ClickOptions
+@onready var alarm_options = %AlarmOptions
 
 var time_running = false
 var show_default_text = true
@@ -54,6 +57,9 @@ func _ready():
 	cycle_slider.value = cycles_to_long_break
 	long_break_slider.value = long_break_timer_mins
 	work_slider.value = work_timer_mins
+	change_click(click_options.selected)
+	change_alarm(alarm_options.selected)
+	#NOTE: Volume slider is updated in load_in_save()
 
 func load_in_save():
 	var save_data = SaveManager.read_save()
@@ -63,6 +69,10 @@ func load_in_save():
 	cycles_to_long_break = save_data.cycles_to_long_break
 	autostart_button.button_pressed = save_data.autostart
 	dark_button.button_pressed = save_data.dark_theme
+	volume_slider.value = save_data.volume
+	click_options.selected = save_data.selected_click
+	alarm_options.selected = save_data.selected_alarm
+	AudioServer.set_bus_volume_db(1, linear_to_db(save_data.volume))
 	print(save_data)
 
 func _on_start_pause_button_pressed():
@@ -217,10 +227,16 @@ func _on_reset_button_pressed():
 	break_slider.value = 5
 	long_break_slider.value = 15
 	cycle_slider.value = 4
+	volume_slider.value = 1.0
 	autostart_button.button_pressed = false
 	dark_button.button_pressed = true
+	alarm_options.selected = 0
+	click_options.selected = 0
+	change_click(click_options.selected)
+	change_alarm(alarm_options.selected)
 
 func _on_apply_button_pressed():
+	save_options()
 	work_timer_mins = work_slider.value
 	break_timer_mins = break_slider.value
 	long_break_timer_mins = long_break_slider.value
@@ -235,15 +251,48 @@ func update_timer():
 	work_timer.wait_time = work_timer_mins * 60
 	break_timer.wait_time = break_timer_mins * 60
 	long_break_timer.wait_time = long_break_timer_mins * 60
-	current_cycle = 0
-	cycle_label.text = "#0"
+	#current_cycle = 0
+	#cycle_label.text = "#0"
 	background_rect.color = current_theme[0]
 
 func _on_save_button_pressed():
+	save_options()
+
+func save_options():
 	var write_me = { "autostart": autostart_button.button_pressed,
 		"break_time": break_slider.value,
 		"cycles_to_long_break": cycle_slider.value,
 		"dark_theme": dark_button.button_pressed,
 		"long_break_time": long_break_slider.value,
+		"selected_alarm": alarm_options.selected, #TODO: Unfuck this when you add new alarms
+		"selected_click": click_options.selected,
+		"volume": volume_slider.value,
 		"work_time": work_slider.value }
 	SaveManager.write_save(write_me)
+
+func _on_volume_slider_value_changed(value):
+	AudioServer.set_bus_volume_db(1, linear_to_db(value))
+
+func change_click(sound):
+	var new_sound = ""
+	match sound:
+		0:
+			new_sound = "res://Clicks/DefaultClick.mp3"
+		1:
+			new_sound = "res://Clicks/yuh.wav"
+	click_sound.stream = load(new_sound)
+
+func change_alarm(sound):
+	var new_sound = ""
+	match sound:
+		0:
+			new_sound = "res://Alarms/DefaultAlarm.wav"
+		1:
+			new_sound = "res://Alarms/owowowow.wav"
+	alarm_sound.stream = load(new_sound)
+
+func _on_click_options_item_selected(index):
+	change_click(index)
+
+func _on_alarm_options_item_selected(index):
+	change_alarm(index)

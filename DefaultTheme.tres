@@ -1,0 +1,6 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://eio0rva7lh3b"]
+
+[ext_resource type="FontFile" uid="uid://dpsmlbkpiux6s" path="res://OpenSans-Semibold.ttf" id="1_ajwpl"]
+
+[resource]
+default_font = ExtResource("1_ajwpl")
