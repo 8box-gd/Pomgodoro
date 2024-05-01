@@ -41,10 +41,10 @@ var light_theme_colors = [Color.TOMATO, Color.DARK_TURQUOISE, Color.ROYAL_BLUE]
 var dark_theme_colors = [Color.WEB_MAROON, Color.DARK_SLATE_GRAY, Color.MIDNIGHT_BLUE]
 var current_theme = dark_theme_colors
 
-@export var work_timer_mins = 5/60
-@export var break_timer_mins = 1/60
-@export var long_break_timer_mins = 3/60
-@export var cycles_to_long_break: int = 4
+var work_timer_mins: int = 25
+var break_timer_mins: int = 5
+var long_break_timer_mins: int = 15
+var cycles_to_long_break: int = 4
 
 func _ready():
 	load_in_save()
@@ -251,8 +251,9 @@ func update_timer():
 	work_timer.wait_time = work_timer_mins * 60
 	break_timer.wait_time = break_timer_mins * 60
 	long_break_timer.wait_time = long_break_timer_mins * 60
-	#current_cycle = 0
-	#cycle_label.text = "#0"
+	if current_cycle > 0:
+		current_cycle -= 1
+		cycle_label.text = "#"+str(current_cycle)
 	background_rect.color = current_theme[0]
 
 func _on_save_button_pressed():
@@ -280,6 +281,8 @@ func change_click(sound):
 			new_sound = "res://Clicks/DefaultClick.mp3"
 		1:
 			new_sound = "res://Clicks/yuh.wav"
+		2:
+			pass
 	click_sound.stream = load(new_sound)
 
 func change_alarm(sound):
@@ -289,6 +292,8 @@ func change_alarm(sound):
 			new_sound = "res://Alarms/DefaultAlarm.wav"
 		1:
 			new_sound = "res://Alarms/owowowow.wav"
+		2:
+			pass
 	alarm_sound.stream = load(new_sound)
 
 func _on_click_options_item_selected(index):

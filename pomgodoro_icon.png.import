@@ -15,7 +15,7 @@ dest_files=["res://.godot/imported/pomgodoro_icon.png-fa4e93ef5d946f720302ea6a12
 
 [params]
 
-compress/mode=0
+compress/mode=1
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
