@@ -329,6 +329,9 @@ one_shot = true
 wait_time = 3.0
 one_shot = true
 
+[node name="IdleTimer" type="Timer" parent="."]
+wait_time = 30.0
+
 [node name="Alarm" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_1nven")
 bus = &"Mutable"
@@ -336,9 +339,6 @@ bus = &"Mutable"
 [node name="Click" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_qqgwb")
 bus = &"Mutable"
-
-[node name="IdleTimer" type="Timer" parent="."]
-wait_time = 30.0
 
 [connection signal="pressed" from="CanvasLayer/TimerContainer/ChangeTimerContainer/WorkButton" to="." method="_on_work_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/TimerContainer/ChangeTimerContainer/BreakButton" to="." method="_on_break_button_pressed"]
