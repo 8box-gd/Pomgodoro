@@ -133,6 +133,7 @@ func _process(delta):
 
 func _on_work_timer_timeout():
 	alarm_sound.play()
+	app_window.request_attention()
 	start_idletime()
 	prints(current_cycle, cycles_to_long_break, current_cycle % cycles_to_long_break)
 	if (current_cycle % cycles_to_long_break) == 0 and cycles_to_long_break != 1:
@@ -338,16 +339,21 @@ func idle_flash() -> void:
 		flash_rect.color = Color(0.9, 0.9, 0.9, 1)
 	
 	# Don't want to use an AnimationPlayer here because it might be expensive
-	#Window.request_attention()
+	# Currently flashes 4 times
+	var flash_time := 0.4
 	app_window.request_attention()
 	flash_rect.visible = true
-	await get_tree().create_timer(0.6).timeout
+	await get_tree().create_timer(flash_time).timeout
 	flash_rect.visible = false
-	await get_tree().create_timer(0.6).timeout
+	await get_tree().create_timer(flash_time).timeout
 	flash_rect.visible = true
-	await get_tree().create_timer(0.6).timeout
+	await get_tree().create_timer(flash_time).timeout
 	flash_rect.visible = false
-	await get_tree().create_timer(0.6).timeout
+	await get_tree().create_timer(flash_time).timeout
 	flash_rect.visible = true
-	await get_tree().create_timer(0.6).timeout
+	await get_tree().create_timer(flash_time).timeout
+	flash_rect.visible = false
+	await get_tree().create_timer(flash_time).timeout
+	flash_rect.visible = true
+	await get_tree().create_timer(flash_time).timeout
 	flash_rect.visible = false
