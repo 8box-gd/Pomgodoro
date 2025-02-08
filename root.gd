@@ -341,9 +341,13 @@ func idle_flash() -> void:
 	#Window.request_attention()
 	app_window.request_attention()
 	flash_rect.visible = true
-	await get_tree().create_timer(0.7).timeout
+	await get_tree().create_timer(0.6).timeout
 	flash_rect.visible = false
-	await get_tree().create_timer(0.7).timeout
+	await get_tree().create_timer(0.6).timeout
 	flash_rect.visible = true
-	await get_tree().create_timer(0.7).timeout
+	await get_tree().create_timer(0.6).timeout
+	flash_rect.visible = false
+	await get_tree().create_timer(0.6).timeout
+	flash_rect.visible = true
+	await get_tree().create_timer(0.6).timeout
 	flash_rect.visible = false
