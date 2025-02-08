@@ -334,6 +334,8 @@ func idle_flash() -> void:
 			flash_rect.color = light_theme_colors[1]
 		long_break_timer:
 			flash_rect.color = light_theme_colors[2]
+	if current_theme == light_theme_colors:
+		flash_rect.color = Color(0.9, 0.9, 0.9, 1)
 	
 	# Don't want to use an AnimationPlayer here because it might be expensive
 	#Window.request_attention()
