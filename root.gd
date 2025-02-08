@@ -15,6 +15,8 @@ enum {WORK, BREAK, LONGBREAK}
 @onready var work_button = %WorkButton
 @onready var break_button = %BreakButton
 @onready var long_break_button = %LongBreakButton
+@onready var idle_timer: Timer = $IdleTimer
+@onready var flash_rect: ColorRect = %FlashRect
 
 @onready var settings_container = %SettingsContainer
 @onready var work_slider = %WorkSlider
@@ -36,6 +38,7 @@ var show_default_text = true
 @onready var current_timer = work_timer
 var current_cycle: int = 0
 var showing_timer = true
+var idle_flashing_active := false
 
 var light_theme_colors = [Color.TOMATO, Color.DARK_TURQUOISE, Color.ROYAL_BLUE]
 var dark_theme_colors = [Color.WEB_MAROON, Color.DARK_SLATE_GRAY, Color.MIDNIGHT_BLUE]
@@ -45,8 +48,10 @@ var work_timer_mins: int = 25
 var break_timer_mins: int = 5
 var long_break_timer_mins: int = 15
 var cycles_to_long_break: int = 4
+var app_window: Window
 
 func _ready():
+	app_window = get_window()#get_tree().root
 	load_in_save()
 	work_timer.wait_time = work_timer_mins * 60
 	break_timer.wait_time = break_timer_mins * 60
@@ -80,6 +85,7 @@ func _on_start_pause_button_pressed():
 
 func push_startpause():
 	click_sound.play()
+	stop_idletime()
 	if not time_running:
 		start_time()
 	else:
@@ -127,6 +133,8 @@ func _process(delta):
 
 func _on_work_timer_timeout():
 	alarm_sound.play()
+	start_idletime()
+	prints(current_cycle, cycles_to_long_break, current_cycle % cycles_to_long_break)
 	if (current_cycle % cycles_to_long_break) == 0 and cycles_to_long_break != 1:
 		switch_to_long_break()
 	else:
@@ -137,6 +145,7 @@ func _on_work_timer_timeout():
 
 func _on_break_timer_timeout():
 	alarm_sound.play()
+	start_idletime()
 	switch_to_work()
 	if autostart_button.button_pressed:
 		await get_tree().create_timer(1.0).timeout
@@ -144,6 +153,7 @@ func _on_break_timer_timeout():
 
 func _on_long_break_timer_timeout():
 	alarm_sound.play()
+	start_idletime()
 	switch_to_work()
 	if autostart_button.button_pressed:
 		await get_tree().create_timer(1.0).timeout
@@ -301,3 +311,37 @@ func _on_click_options_item_selected(index):
 
 func _on_alarm_options_item_selected(index):
 	change_alarm(index)
+
+
+func start_idletime() -> void:
+	idle_flashing_active = true
+	idle_timer.start()
+	flash_rect.modulate = Color(1,1,1,1)
+
+func stop_idletime() -> void:
+	idle_flashing_active = false
+	idle_timer.stop()
+	flash_rect.modulate = Color(1,1,1,0)
+
+func _on_idle_timer_timeout() -> void:
+	idle_flash()
+
+func idle_flash() -> void:
+	match current_timer:
+		work_timer:
+			flash_rect.color = light_theme_colors[0]
+		break_timer:
+			flash_rect.color = light_theme_colors[1]
+		long_break_timer:
+			flash_rect.color = light_theme_colors[2]
+	
+	# Don't want to use an AnimationPlayer here because it might be expensive
+	#Window.request_attention()
+	app_window.request_attention()
+	flash_rect.visible = true
+	await get_tree().create_timer(0.7).timeout
+	flash_rect.visible = false
+	await get_tree().create_timer(0.7).timeout
+	flash_rect.visible = true
+	await get_tree().create_timer(0.7).timeout
+	flash_rect.visible = false

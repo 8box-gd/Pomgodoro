@@ -20,6 +20,17 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.502, 0, 0, 1)
 
+[node name="FlashRect" type="ColorRect" parent="CanvasLayer/BackgroundRect"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0.4, 0.4, 1)
+
 [node name="TimerContainer" type="VBoxContainer" parent="CanvasLayer"]
 unique_name_in_owner = true
 anchors_preset = 15
@@ -326,6 +337,9 @@ bus = &"Mutable"
 stream = ExtResource("3_qqgwb")
 bus = &"Mutable"
 
+[node name="IdleTimer" type="Timer" parent="."]
+wait_time = 30.0
+
 [connection signal="pressed" from="CanvasLayer/TimerContainer/ChangeTimerContainer/WorkButton" to="." method="_on_work_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/TimerContainer/ChangeTimerContainer/BreakButton" to="." method="_on_break_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/TimerContainer/ChangeTimerContainer/LongBreakButton" to="." method="_on_long_break_button_pressed"]
@@ -345,3 +359,4 @@ bus = &"Mutable"
 [connection signal="timeout" from="WorkTimer" to="." method="_on_work_timer_timeout"]
 [connection signal="timeout" from="BreakTimer" to="." method="_on_break_timer_timeout"]
 [connection signal="timeout" from="LongBreakTimer" to="." method="_on_long_break_timer_timeout"]
+[connection signal="timeout" from="IdleTimer" to="." method="_on_idle_timer_timeout"]
