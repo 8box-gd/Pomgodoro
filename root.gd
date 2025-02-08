@@ -113,7 +113,7 @@ func to_min_sec():
 	var second = int(time_left) % 60
 	return [minute, second]
 
-func _process(delta):
+func _process(_delta):
 	if Input.is_action_just_pressed("startstop"):
 		push_startpause()
 	
