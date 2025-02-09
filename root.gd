@@ -2,47 +2,49 @@ extends Node2D
 
 enum {WORK, BREAK, LONGBREAK}
 
-@onready var timer_container = %TimerContainer
-@onready var time_label = %TimeLabel
-@onready var work_timer = $WorkTimer
-@onready var break_timer = $BreakTimer
-@onready var long_break_timer = $LongBreakTimer
-@onready var start_pause_button = %StartPauseButton
-@onready var cycle_label = %CycleLabel
-@onready var background_rect = %BackgroundRect
-@onready var alarm_sound = $Alarm
-@onready var click_sound = $Click
-@onready var work_button = %WorkButton
-@onready var break_button = %BreakButton
-@onready var long_break_button = %LongBreakButton
+# MAIN SCREEN
+@onready var timer_container: VBoxContainer = %TimerContainer
+@onready var time_label: Label = %TimeLabel
+@onready var work_timer: Timer = $WorkTimer
+@onready var break_timer: Timer = $BreakTimer
+@onready var long_break_timer: Timer = $LongBreakTimer
+@onready var start_pause_button: Button = %StartPauseButton
+@onready var cycle_label: Label = %CycleLabel
+@onready var background_rect: ColorRect = %BackgroundRect
+@onready var alarm_sound: AudioStreamPlayer = $Alarm
+@onready var click_sound: AudioStreamPlayer = $Click
+@onready var work_button: Button = %WorkButton
+@onready var break_button: Button = %BreakButton
+@onready var long_break_button: Button = %LongBreakButton
 @onready var idle_timer: Timer = $IdleTimer
 @onready var flash_rect: ColorRect = %FlashRect
 
-@onready var settings_container = %SettingsContainer
-@onready var work_slider = %WorkSlider
-@onready var work_setting_label = %WorkSettingLabel
-@onready var break_slider = %BreakSlider
-@onready var break_setting_label = %BreakSettingLabel
-@onready var long_break_slider = %LongBreakSlider
-@onready var long_break_setting_label = %LongBreakSettingLabel
-@onready var cycle_slider = %CycleSlider
-@onready var cycle_setting_label = %CycleSettingLabel
-@onready var autostart_button = %AutostartButton
-@onready var dark_button = %DarkButton
-@onready var volume_slider = $CanvasLayer/SettingsContainer/Volume/VolumeSlider
-@onready var click_options = %ClickOptions
-@onready var alarm_options = %AlarmOptions
+# SETTINGS
+@onready var settings_container: VBoxContainer = %SettingsContainer
+@onready var work_slider: HSlider = %WorkSlider
+@onready var work_setting_label: Label = %WorkSettingLabel
+@onready var break_slider: HSlider = %BreakSlider
+@onready var break_setting_label: Label = %BreakSettingLabel
+@onready var long_break_slider: HSlider = %LongBreakSlider
+@onready var long_break_setting_label: Label = %LongBreakSettingLabel
+@onready var cycle_slider: HSlider = %CycleSlider
+@onready var cycle_setting_label: Label = %CycleSettingLabel
+@onready var autostart_button: CheckButton = %AutostartButton
+@onready var dark_button: CheckButton = %DarkButton
+@onready var volume_slider: HSlider = $CanvasLayer/SettingsContainer/Volume/VolumeSlider
+@onready var click_options: OptionButton = %ClickOptions
+@onready var alarm_options: OptionButton = %AlarmOptions
 
-var time_running = false
-var show_default_text = true
-@onready var current_timer = work_timer
+var time_running := false
+var show_default_text := true
+@onready var current_timer: Timer = work_timer
 var current_cycle: int = 0
-var showing_timer = true
+var showing_timer := true
 var idle_flashing_active := false
 
-var light_theme_colors = [Color.TOMATO, Color.DARK_TURQUOISE, Color.ROYAL_BLUE]
-var dark_theme_colors = [Color.WEB_MAROON, Color.DARK_SLATE_GRAY, Color.MIDNIGHT_BLUE]
-var current_theme = dark_theme_colors
+var light_theme_colors: Array[Color] = [Color.TOMATO, Color.DARK_TURQUOISE, Color.ROYAL_BLUE]
+var dark_theme_colors: Array[Color] = [Color.WEB_MAROON, Color.DARK_SLATE_GRAY, Color.MIDNIGHT_BLUE]
+var current_theme: Array[Color] = dark_theme_colors
 
 var work_timer_mins: int = 25
 var break_timer_mins: int = 5
@@ -67,7 +69,7 @@ func _ready():
 	#NOTE: Volume slider is updated in load_in_save()
 
 func load_in_save():
-	var save_data = SaveManager.read_save()
+	var save_data: Variant = SaveManager.read_save()
 	work_timer_mins = save_data.work_time
 	break_timer_mins = save_data.break_time
 	long_break_timer_mins = save_data.long_break_time
@@ -248,8 +250,11 @@ func _on_reset_button_pressed():
 
 func _on_apply_button_pressed():
 	save_options()
-	work_timer_mins = work_slider.value
+	@warning_ignore("narrowing_conversion")
+	work_timer_mins = work_slider.value # Narrowing conversion. Intended.
+	@warning_ignore("narrowing_conversion")
 	break_timer_mins = break_slider.value
+	@warning_ignore("narrowing_conversion")
 	long_break_timer_mins = long_break_slider.value
 	update_timer()
 	
