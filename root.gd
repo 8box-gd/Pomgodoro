@@ -1,7 +1,5 @@
 extends Node2D
 
-enum {WORK, BREAK, LONGBREAK}
-
 # MAIN SCREEN
 @onready var timer_container: VBoxContainer = %TimerContainer
 @onready var time_label: Label = %TimeLabel
@@ -52,7 +50,7 @@ var long_break_timer_mins: int = 15
 var cycles_to_long_break: int = 4
 var app_window: Window
 
-func _ready():
+func _ready() -> void:
 	app_window = get_window()#get_tree().root
 	load_in_save()
 	work_timer.wait_time = work_timer_mins * 60
@@ -68,7 +66,7 @@ func _ready():
 	change_alarm(alarm_options.selected)
 	#NOTE: Volume slider is updated in load_in_save()
 
-func load_in_save():
+func load_in_save() -> void:
 	var save_data: Variant = SaveManager.read_save()
 	work_timer_mins = save_data.work_time
 	break_timer_mins = save_data.break_time
@@ -82,10 +80,10 @@ func load_in_save():
 	AudioServer.set_bus_volume_db(1, linear_to_db(save_data.volume))
 	print(save_data)
 
-func _on_start_pause_button_pressed():
+func _on_start_pause_button_pressed() -> void:
 	push_startpause()
 
-func push_startpause():
+func push_startpause() -> void:
 	click_sound.play()
 	stop_idletime()
 	if not time_running:
@@ -93,7 +91,7 @@ func push_startpause():
 	else:
 		stop_time()
 
-func start_time():
+func start_time() -> void:
 	if current_timer.is_stopped():
 		current_timer.start()
 		if current_timer == work_timer:
@@ -104,18 +102,18 @@ func start_time():
 	current_timer.paused = false
 	start_pause_button.text = "PAUSE"
 
-func stop_time():
+func stop_time() -> void:
 	time_running = false
 	current_timer.paused = true
 	start_pause_button.text = "START"
 
-func to_min_sec():
-	var time_left = current_timer.time_left
-	var minute = floor(time_left / 60)
-	var second = int(time_left) % 60
+func to_min_sec() -> Array[int]:
+	var time_left: float = current_timer.time_left
+	var minute: int = floor(time_left / 60)
+	var second: int = int(time_left) % 60
 	return [minute, second]
 
-func _process(_delta):
+func _process(_delta) -> void:
 	if Input.is_action_just_pressed("startstop"):
 		push_startpause()
 	
@@ -133,7 +131,7 @@ func _process(_delta):
 				time_label.text = str(long_break_timer_mins)+":00"
 				if long_break_timer_mins < 10: time_label.text = "0"+time_label.text
 
-func _on_work_timer_timeout():
+func _on_work_timer_timeout() -> void:
 	alarm_sound.play()
 	app_window.request_attention()
 	start_idletime()
@@ -146,7 +144,7 @@ func _on_work_timer_timeout():
 		await get_tree().create_timer(1.0).timeout
 		start_time()
 
-func _on_break_timer_timeout():
+func _on_break_timer_timeout() -> void:
 	alarm_sound.play()
 	start_idletime()
 	switch_to_work()
@@ -154,7 +152,7 @@ func _on_break_timer_timeout():
 		await get_tree().create_timer(1.0).timeout
 		start_time()
 
-func _on_long_break_timer_timeout():
+func _on_long_break_timer_timeout() -> void:
 	alarm_sound.play()
 	start_idletime()
 	switch_to_work()
@@ -162,7 +160,7 @@ func _on_long_break_timer_timeout():
 		await get_tree().create_timer(1.0).timeout
 		start_time()
 
-func switch_to_work():
+func switch_to_work() -> void:
 	stop_time()
 	current_timer = work_timer
 	show_default_text = true
@@ -170,7 +168,7 @@ func switch_to_work():
 	work_button.disabled = true
 	break_button.disabled = false
 	long_break_button.disabled = false
-func switch_to_break():
+func switch_to_break() -> void:
 	stop_time()
 	current_timer = break_timer
 	show_default_text = true
@@ -178,7 +176,7 @@ func switch_to_break():
 	work_button.disabled = false
 	break_button.disabled = true
 	long_break_button.disabled = false
-func switch_to_long_break():
+func switch_to_long_break() -> void:
 	stop_time()
 	current_timer = long_break_timer
 	show_default_text = true
@@ -187,23 +185,23 @@ func switch_to_long_break():
 	break_button.disabled = false
 	long_break_button.disabled = true
 
-func _on_work_button_pressed():
+func _on_work_button_pressed() -> void:
 	work_timer.stop()
 	break_timer.stop()
 	long_break_timer.stop()
 	switch_to_work()
-func _on_break_button_pressed():
+func _on_break_button_pressed() -> void:
 	work_timer.stop()
 	break_timer.stop()
 	long_break_timer.stop()
 	switch_to_break()
-func _on_long_break_button_pressed():
+func _on_long_break_button_pressed() -> void:
 	work_timer.stop()
 	break_timer.stop()
 	long_break_timer.stop()
 	switch_to_long_break()
 
-func _on_settings_button_pressed():
+func _on_settings_button_pressed() -> void:
 	if showing_timer:
 		timer_container.visible = false
 		settings_container.visible = true
@@ -215,27 +213,27 @@ func _on_settings_button_pressed():
 
 ## SETTINGS BEGIN HERE
 
-func _on_work_slider_value_changed(value):
+func _on_work_slider_value_changed(value) -> void:
 	work_setting_label.text = "Work time: "+str(work_slider.value)+" minutes"
 
-func _on_break_slider_value_changed(value):
+func _on_break_slider_value_changed(value) -> void:
 	break_setting_label.text = "Break time: "+str(break_slider.value)+" minutes"
 
-func _on_long_break_slider_value_changed(value):
+func _on_long_break_slider_value_changed(value) -> void:
 	long_break_setting_label.text = "Long break time: "+str(long_break_slider.value)+" minutes"
 
-func _on_cycle_slider_value_changed(value):
+func _on_cycle_slider_value_changed(value) -> void:
 	cycle_setting_label.text = "Have a long break every "+str(cycle_slider.value)+" cycles"
 	if cycle_slider.value == 1: cycle_setting_label.text = "Long breaks disabled"
 
-func _on_dark_button_toggled(toggled_on):
+func _on_dark_button_toggled(toggled_on) -> void:
 	if toggled_on:
 		current_theme = dark_theme_colors
 	else:
 		current_theme = light_theme_colors
 	background_rect.color = current_theme[0]
 
-func _on_reset_button_pressed():
+func _on_reset_button_pressed() -> void:
 	work_slider.value = 25
 	break_slider.value = 5
 	long_break_slider.value = 15
@@ -248,7 +246,7 @@ func _on_reset_button_pressed():
 	change_click(click_options.selected)
 	change_alarm(alarm_options.selected)
 
-func _on_apply_button_pressed():
+func _on_apply_button_pressed() -> void:
 	save_options()
 	@warning_ignore("narrowing_conversion")
 	work_timer_mins = work_slider.value # Narrowing conversion. Intended.
@@ -263,7 +261,7 @@ func _on_apply_button_pressed():
 	showing_timer = true
 	switch_to_work()
 
-func update_timer():
+func update_timer() -> void:
 	work_timer.wait_time = work_timer_mins * 60
 	break_timer.wait_time = break_timer_mins * 60
 	long_break_timer.wait_time = long_break_timer_mins * 60
@@ -272,11 +270,11 @@ func update_timer():
 		cycle_label.text = "#"+str(current_cycle)
 	background_rect.color = current_theme[0]
 
-func _on_save_button_pressed():
+func _on_save_button_pressed() -> void:
 	save_options()
 
-func save_options():
-	var write_me = { "autostart": autostart_button.button_pressed,
+func save_options() -> void:
+	var write_me: Variant = { "autostart": autostart_button.button_pressed,
 		"break_time": break_slider.value,
 		"cycles_to_long_break": cycle_slider.value,
 		"dark_theme": dark_button.button_pressed,
@@ -287,11 +285,11 @@ func save_options():
 		"work_time": work_slider.value }
 	SaveManager.write_save(write_me)
 
-func _on_volume_slider_value_changed(value):
+func _on_volume_slider_value_changed(value:float) -> void:
 	AudioServer.set_bus_volume_db(1, linear_to_db(value))
 
-func change_click(sound):
-	var new_sound = ""
+func change_click(sound:int) -> void:
+	var new_sound := ""
 	match sound:
 		0:
 			new_sound = "res://Clicks/DefaultClick.mp3"
@@ -301,8 +299,8 @@ func change_click(sound):
 			pass
 	click_sound.stream = load(new_sound)
 
-func change_alarm(sound):
-	var new_sound = ""
+func change_alarm(sound:int) -> void:
+	var new_sound := ""
 	match sound:
 		0:
 			new_sound = "res://Alarms/DefaultAlarm.wav"
@@ -312,12 +310,13 @@ func change_alarm(sound):
 			pass
 	alarm_sound.stream = load(new_sound)
 
-func _on_click_options_item_selected(index):
+func _on_click_options_item_selected(index:int) -> void:
 	change_click(index)
 
-func _on_alarm_options_item_selected(index):
+func _on_alarm_options_item_selected(index:int) -> void:
 	change_alarm(index)
 
+## NUDGE SYSTEM
 
 func start_idletime() -> void:
 	idle_flashing_active = true
