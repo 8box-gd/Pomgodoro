@@ -249,6 +249,11 @@ func update_timer() -> void:
 #region Save System
 # I fucking hate dealing with this save system because I'm always worried I
 # accidentally broke something. There's gotta be a better way to do this
+# Maybe there's a way to get all the variables in a script, then automatically
+# write a json that stores all their values
+# Perhaps, the variables' default value in the code can be what the default
+# save file is, so I don't have to bounce between the code and the json
+# so many times
 
 func _on_save_button_pressed() -> void:
 	save_options()

@@ -1,9 +1,6 @@
 extends Node
 
-var json := JSON.new()
 var path := "user://data.json"
-
-var data: Variant = {}
 
 func write_save(content: Variant) -> void:
 	var file := FileAccess.open(path, FileAccess.WRITE)
@@ -19,7 +16,6 @@ func read_save() -> Variant:
 func create_new_save_file() -> void:
 	var file := FileAccess.open("res://default_save.json", FileAccess.READ)
 	var content: Variant = JSON.parse_string(file.get_as_text())
-	data = content
 	write_save(content)
 
 func _ready() -> void:
