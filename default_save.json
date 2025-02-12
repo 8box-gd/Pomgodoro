@@ -7,5 +7,6 @@
 	"autostart": false,
 	"dark_theme": true,
 	"selected_alarm": 0,
-	"selected_click": 0
+	"selected_click": 0,
+	"nudge_sound": false
 }

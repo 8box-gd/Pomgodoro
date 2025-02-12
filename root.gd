@@ -32,6 +32,7 @@ extends Node2D
 @onready var volume_slider: HSlider = $CanvasLayer/SettingsContainer/Volume/VolumeSlider
 @onready var click_options: OptionButton = %ClickOptions
 @onready var alarm_options: OptionButton = %AlarmOptions
+@onready var nudge_button: CheckButton = %NudgeButton
 
 var time_running := false
 var show_default_text := true
@@ -64,21 +65,7 @@ func _ready() -> void:
 	work_slider.value = work_timer_mins
 	change_click(click_options.selected)
 	change_alarm(alarm_options.selected)
-	#NOTE: Volume slider is updated in load_in_save()
-
-func load_in_save() -> void:
-	var save_data: Variant = SaveManager.read_save()
-	work_timer_mins = save_data.work_time
-	break_timer_mins = save_data.break_time
-	long_break_timer_mins = save_data.long_break_time
-	cycles_to_long_break = save_data.cycles_to_long_break
-	autostart_button.button_pressed = save_data.autostart
-	dark_button.button_pressed = save_data.dark_theme
-	volume_slider.value = save_data.volume
-	click_options.selected = save_data.selected_click
-	alarm_options.selected = save_data.selected_alarm
-	AudioServer.set_bus_volume_db(1, linear_to_db(save_data.volume))
-	print(save_data)
+	# NOTE: Volume slider is updated in load_in_save()
 
 func _on_start_pause_button_pressed() -> void:
 	push_startpause()
@@ -233,23 +220,12 @@ func _on_dark_button_toggled(toggled_on) -> void:
 		current_theme = light_theme_colors
 	background_rect.color = current_theme[0]
 
-func _on_reset_button_pressed() -> void:
-	work_slider.value = 25
-	break_slider.value = 5
-	long_break_slider.value = 15
-	cycle_slider.value = 4
-	volume_slider.value = 1.0
-	autostart_button.button_pressed = false
-	dark_button.button_pressed = true
-	alarm_options.selected = 0
-	click_options.selected = 0
-	change_click(click_options.selected)
-	change_alarm(alarm_options.selected)
+
 
 func _on_apply_button_pressed() -> void:
 	save_options()
 	@warning_ignore("narrowing_conversion")
-	work_timer_mins = work_slider.value # Narrowing conversion. Intended.
+	work_timer_mins = work_slider.value # Float to int is intended.
 	@warning_ignore("narrowing_conversion")
 	break_timer_mins = break_slider.value
 	@warning_ignore("narrowing_conversion")
@@ -270,6 +246,10 @@ func update_timer() -> void:
 		cycle_label.text = "#"+str(current_cycle)
 	background_rect.color = current_theme[0]
 
+#region Save System
+# I fucking hate dealing with this save system because I'm always worried I
+# accidentally broke something. There's gotta be a better way to do this
+
 func _on_save_button_pressed() -> void:
 	save_options()
 
@@ -282,8 +262,40 @@ func save_options() -> void:
 		"selected_alarm": alarm_options.selected, #TODO: Unfuck this when you add new alarms
 		"selected_click": click_options.selected,
 		"volume": volume_slider.value,
-		"work_time": work_slider.value }
+		"work_time": work_slider.value,
+		"nudge_sound": nudge_button.button_pressed }
 	SaveManager.write_save(write_me)
+
+func load_in_save() -> void:
+	var save_data: Variant = SaveManager.read_save()
+	work_timer_mins = save_data.work_time
+	break_timer_mins = save_data.break_time
+	long_break_timer_mins = save_data.long_break_time
+	cycles_to_long_break = save_data.cycles_to_long_break
+	autostart_button.button_pressed = save_data.autostart
+	dark_button.button_pressed = save_data.dark_theme
+	volume_slider.value = save_data.volume
+	click_options.selected = save_data.selected_click
+	alarm_options.selected = save_data.selected_alarm
+	nudge_button.button_pressed = save_data.nudge_sound
+	AudioServer.set_bus_volume_db(1, linear_to_db(save_data.volume))
+	print(save_data)
+
+func _on_reset_button_pressed() -> void:
+	work_slider.value = 25
+	break_slider.value = 5
+	long_break_slider.value = 15
+	cycle_slider.value = 4
+	volume_slider.value = 1.0
+	autostart_button.button_pressed = false
+	dark_button.button_pressed = true
+	alarm_options.selected = 0
+	click_options.selected = 0
+	nudge_button.button_pressed = false
+	change_click(click_options.selected)
+	change_alarm(alarm_options.selected)
+
+#endregion
 
 func _on_volume_slider_value_changed(value:float) -> void:
 	AudioServer.set_bus_volume_db(1, linear_to_db(value))
@@ -332,6 +344,7 @@ func _on_idle_timer_timeout() -> void:
 	idle_flash()
 
 func idle_flash() -> void:
+	if nudge_button.button_pressed: click_sound.play()
 	match current_timer:
 		work_timer:
 			flash_rect.color = light_theme_colors[0]

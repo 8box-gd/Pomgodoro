@@ -293,6 +293,19 @@ layout_mode = 2
 theme = ExtResource("2_o2fwf")
 text = "Dark theme"
 
+[node name="NudgeSound" type="HBoxContainer" parent="CanvasLayer/SettingsContainer"]
+layout_mode = 2
+
+[node name="NudgeButton" type="CheckButton" parent="CanvasLayer/SettingsContainer/NudgeSound"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+
+[node name="NudgeLabel" type="Label" parent="CanvasLayer/SettingsContainer/NudgeSound"]
+layout_mode = 2
+theme = ExtResource("2_o2fwf")
+text = "Nudge Sound"
+
 [node name="MarginContainer3" type="MarginContainer" parent="CanvasLayer/SettingsContainer"]
 custom_minimum_size = Vector2(533.765, 10)
 layout_mode = 2
